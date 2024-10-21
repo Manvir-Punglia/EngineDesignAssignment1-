@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Car : Subject
 {
@@ -13,14 +14,31 @@ public class Car : Subject
     private float turnInput;           
     private Quaternion targetRotation;
 
+    private ProgressBar _progressBar;
+
+    private void Awake()
+    {
+        _progressBar = (ProgressBar)FindObjectOfType(typeof(ProgressBar));
+    }
     void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
+    private void OnEnable()
+    {
+        Attach(_progressBar);
+    }
+
+    private void OnDisable()
+    {
+        Detach(_progressBar);
+    }
+
     void Update()
     {
         Debug.Log(rb.velocity.magnitude);
+        NotifyObservers();
     }
 
     void FixedUpdate()
@@ -67,5 +85,9 @@ public class Car : Subject
             //turns smoothly remove if turning is bad 
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * turnSpeed);
         }
+    }
+    public float GetSpeed()
+    {
+        return rb.velocity.magnitude;
     }
 }

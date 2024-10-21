@@ -11,6 +11,7 @@ public class ProgressBar : Observer
     public Image mask; 
     public Image fill; 
     public Color backgroundColor = Color.red;
+    private Car _Car;
     
     void GetCurrentFill()
     {
@@ -27,5 +28,7 @@ public class ProgressBar : Observer
     public override void Notify(Subject subject)
     {
         
+        _Car = subject.GetComponent<Car>();
+        current = (int)_Car.GetSpeed();
     }
 }
