@@ -37,7 +37,7 @@ public class Car : Subject
 
     void Update()
     {
-        Debug.Log(rb.velocity.magnitude);
+        //Debug.Log(rb.velocity.magnitude);
         NotifyObservers();
     }
 
