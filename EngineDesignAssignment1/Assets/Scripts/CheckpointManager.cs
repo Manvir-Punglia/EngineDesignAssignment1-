@@ -1,21 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 public class CheckpointManager : Singleton<CheckpointManager>
 {
     private List<SingleCheckpoint> singleCheckpointList;
-    private int nextCheckpointIndex;
-
-    public Text checkpointText;
-
+    [HideInInspector] public int nextCheckpointIndex;
+    [HideInInspector] public int lastCheckpointIndex;
+    
     void Start()
     {
         Transform checkpointsTransform = transform.Find("Checkpoints");
         if (checkpointsTransform == null)
         {
-            Debug.Log("didnt work");
+            Debug.Log("Couldn't find the checkpoints");
         }
 
         singleCheckpointList = new List<SingleCheckpoint> ();
@@ -32,7 +31,7 @@ public class CheckpointManager : Singleton<CheckpointManager>
 
     private void Update()
     {
-        checkpointText.text = (nextCheckpointIndex.ToString()) + "/" + singleCheckpointList.Count;
+        lastCheckpointIndex = singleCheckpointList.Count;
     }
 
     public void PassCheckpoint(SingleCheckpoint singleCheckpoint)
