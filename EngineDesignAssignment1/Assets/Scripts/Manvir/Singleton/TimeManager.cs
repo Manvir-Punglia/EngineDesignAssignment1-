@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TimeManager : Singleton<TimeManager>
@@ -41,13 +42,20 @@ public class TimeManager : Singleton<TimeManager>
         text.text = "0";
         isCountingDown = false;
 
-        CountDownEnd();  //execute when the timer hits zero
+        CountDownEnd();  
     }
 
-    //called when the timer hits zero
+    
     void CountDownEnd()
     {
-       Destroy(_car);
+        Destroy(_car);
+        StartCoroutine(RestartAfterDelay(5));
+    }
+
+    IEnumerator RestartAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void ResetTimer()
