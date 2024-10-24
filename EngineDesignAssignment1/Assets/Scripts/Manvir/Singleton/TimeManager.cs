@@ -13,7 +13,12 @@ public class TimeManager : Singleton<TimeManager>
 
     void Start()
     {
-        ResetTimer();  
+        ResetTimer();
+
+        if (_car == null)
+        {
+            _car = FindObjectOfType<Car>();
+        }
     }
 
     void Update()
@@ -48,14 +53,18 @@ public class TimeManager : Singleton<TimeManager>
     
     void CountDownEnd()
     {
-        Destroy(_car);
+        _car.enabled = false;
+        _car.isDrift = false;
         StartCoroutine(RestartAfterDelay(5));
     }
 
     IEnumerator RestartAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        _car.enabled = true;
+        _car.RespawnCar();
+        ResetTimer();
+        CheckpointManager.Instance.ResetCheckpoints();
     }
 
     public void ResetTimer()

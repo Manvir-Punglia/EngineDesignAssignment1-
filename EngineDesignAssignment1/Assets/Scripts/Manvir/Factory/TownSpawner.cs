@@ -7,7 +7,7 @@ public class TownSpawner : MonoBehaviour
     public GameObject[] buildingPrefabs;  
     public Transform[] spawnPoints;       
 
-    void Start()
+    void Awake()
     {     
         for (int i = 0; i < spawnPoints.Length; i++)
         {

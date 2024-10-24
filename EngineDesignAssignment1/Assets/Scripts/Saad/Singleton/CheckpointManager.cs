@@ -46,4 +46,9 @@ public class CheckpointManager : Singleton<CheckpointManager>
             Debug.Log("Wrong Checkpoint");
         }
     }
+
+    public void ResetCheckpoints()
+    {
+        nextCheckpointIndex = 0;
+    }
 }

@@ -23,15 +23,20 @@ public class Car : Subject
     [HideInInspector] public int _currentCheckpoint;
     [HideInInspector] public int _lastCheckpoint;
 
-    private bool isDrift;
+    [HideInInspector] public bool isDrift;
     public float driftPotential = 45f;
 
     public float floatForce = 10f;
     public float maxFloatHeight = 2f;
     public float minFloatHeight = 1f;
 
+    private Renderer carRenderer;
+
+    public Transform respawnPos;
+
     private void Awake()
     {
+
         _progressBar = (ProgressBar)FindObjectOfType(typeof(ProgressBar));
         _checkpointText = (CheckpointText)FindObjectOfType(typeof(CheckpointText));
     }
@@ -39,6 +44,7 @@ public class Car : Subject
     {
         rb = GetComponent<Rigidbody>();
         isDrift = false;
+        carRenderer = GetComponent<Renderer>();
     }
 
     private void OnEnable()
@@ -182,6 +188,23 @@ public class Car : Subject
         moveInput = -1f;
     }
 
+    public Color GetCarColour()
+    {
+        return carRenderer.material.color;
+    }
 
+    public void SetCarColour(Color colour)
+    {
+        carRenderer.material.color = colour;
+    }
+
+    public void RespawnCar()
+    {
+        transform.position = respawnPos.position;
+        transform.rotation = respawnPos.rotation;
+
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
 
 }

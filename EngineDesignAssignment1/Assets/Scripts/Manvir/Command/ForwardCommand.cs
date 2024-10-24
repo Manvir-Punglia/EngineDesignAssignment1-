@@ -15,4 +15,9 @@ public class ForwardCommand :ICommand
     {
         _car.MoveForward();
     }
+
+    public void Undo()
+    {
+
+    }
 }

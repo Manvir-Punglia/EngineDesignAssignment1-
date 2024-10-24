@@ -15,4 +15,9 @@ public class BackwardCommand : ICommand
     {
         _car.MoveBackward();
     }
+
+    public void Undo()
+    {
+
+    }
 }

@@ -8,12 +8,30 @@ public class CheckpointText : Observer
     private Car _car;
     private int _currentCheckpoint;
     private int _lastCheckpoint;
-    public Text checkpointText;
+    public GameObject checkpointTextObject;
 
-    // Update is called once per frame
+    private void Awake()
+    {
+        if (checkpointTextObject == null)
+        {
+            checkpointTextObject.SetActive(true);
+            checkpointTextObject = GameObject.Find("CheckpointText");
+        }
+        
+    }
+
+    private void Start()
+    {
+        checkpointTextObject = GameObject.Find("CheckpointText");
+    }
+
     void Update()
     {
-        checkpointText.text = (_currentCheckpoint.ToString()) + "/" + _lastCheckpoint;
+        if (checkpointTextObject != null)
+        {
+            checkpointTextObject.GetComponent<Text>().text = (_currentCheckpoint.ToString()) + "/" + _lastCheckpoint;
+        }
+        
     }
 
     public override void Notify(Subject subject)

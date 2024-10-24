@@ -9,7 +9,7 @@ public class ObstacleSpawner : MonoBehaviour
     public BoxCollider TargetArea;
     public int obstacleCount = 10;
 
-    private void Start()
+    private void Awake()
     {
         SpawnObstacles();
     }
