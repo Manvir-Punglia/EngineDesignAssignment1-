@@ -8,6 +8,7 @@ public class TimeManager : Singleton<TimeManager>
     private float currentTime;
     private bool isCountingDown = false;
     public Text text;  
+    public Car _car;
 
     void Start()
     {
@@ -46,7 +47,7 @@ public class TimeManager : Singleton<TimeManager>
     //called when the timer hits zero
     void CountDownEnd()
     {
-        Debug.Log("Timer has finished!");
+       Destroy(_car);
     }
 
     public void ResetTimer()

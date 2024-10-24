@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class InputHandler:MonoBehaviour
 {
-    private Dictionary<KeyCode, Command> keyLog;
+    private Dictionary<KeyCode, ICommand> keyLog;
 
     public InputHandler()
     {
-        keyLog = new Dictionary<KeyCode, Command>();
+        keyLog = new Dictionary<KeyCode, ICommand>();
     }
 
-    public void SetCommand(KeyCode key, Command command)
+    public void SetCommand(KeyCode key, ICommand command)
     {
         keyLog[key] = command;
     }

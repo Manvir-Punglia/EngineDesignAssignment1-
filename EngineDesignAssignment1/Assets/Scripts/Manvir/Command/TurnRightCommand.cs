@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurnRightCommand : Command
+public class TurnRightCommand : ICommand
 {
     private Car _car;
 
@@ -11,7 +11,7 @@ public class TurnRightCommand : Command
         _car = car;
     }
 
-    public override void Execute()
+    public  void Execute()
     {
         _car.TurnRight();
     }

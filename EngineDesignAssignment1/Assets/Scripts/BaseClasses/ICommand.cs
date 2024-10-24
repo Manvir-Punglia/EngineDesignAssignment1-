@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Command
+public interface ICommand
 {
-    public abstract void Execute();
+    public void Execute();
 }
