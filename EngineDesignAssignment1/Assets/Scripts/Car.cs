@@ -24,6 +24,11 @@ public class Car : Subject
     [HideInInspector] public int _lastCheckpoint;
 
     private bool isDrift;
+    public float driftPotential = 45f;
+
+    public float floatForce = 10f;
+    public float maxFloatHeight = 2f;
+    public float minFloatHeight = 1f;
 
     private void Awake()
     {
@@ -96,12 +101,29 @@ public class Car : Subject
        
         if (rb.velocity.magnitude > 0)// you can only turn as long as you are moving
         {
-            isDrift = true;
+            
             float rotationAngle = turnInput * turnSpeed * Time.fixedDeltaTime;
             targetRotation = Quaternion.Euler(0f, transform.eulerAngles.y + rotationAngle, 0f);
             //turns smoothly remove if turning is bad 
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * turnSpeed);
         }
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit))
+        {
+            float distToGround = hit.distance;
+
+            
+
+            if (distToGround < minFloatHeight)
+            {
+                float upwardForce = floatForce * (minFloatHeight - distToGround);
+
+                rb.AddForce(Vector3.up * upwardForce, ForceMode.Acceleration);
+            }
+        }
+
+        
 
     }
     public float GetSpeed()
@@ -111,6 +133,18 @@ public class Car : Subject
 
     private void CheckDrift()
     {
+        Vector3 camForward = Camera.main.transform.forward;
+        camForward.y = 0f;
+        camForward.Normalize();
+
+        Vector3 carForward = transform.forward;
+        carForward.y = 0f;
+        carForward.Normalize();
+
+        float carAngle = Vector3.Angle(camForward, carForward);
+
+        isDrift = carAngle > driftPotential;
+
         if (isDrift) StartEmitting();
         else StopEmitting();
     }
