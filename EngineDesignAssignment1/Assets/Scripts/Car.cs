@@ -8,7 +8,7 @@ public class Car : Subject
 {
     public Rigidbody rb;               
     public float moveForce = 500f;  
-    public float turnSpeed = 25f;
+    public float turnSpeed = 100f;
     public float maxSpeed = 50f;
 
     public TrailRenderer[] _tireTracks;
@@ -75,21 +75,21 @@ public class Car : Subject
 
         if (Input.GetKey(KeyCode.W))
         {
-            moveInput = 1f;  
+            MoveForward();  
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            moveInput = -1f;  
+            MoveBackward();
         }
 
         
         if (Input.GetKey(KeyCode.A))
         {
-            turnInput = -1f; 
+            TurnLeft();
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            turnInput = 1f; 
+            TurnRight();
         }
 
        
@@ -164,4 +164,23 @@ public class Car : Subject
             T.emitting = false;
         }
     }
+    public void TurnLeft()
+    {
+        turnInput = -1f;        
+    }
+    public void TurnRight()
+    {
+        turnInput = 1f;
+    }
+    public void MoveForward()
+    {
+        moveInput = 1f;
+    }
+    public void MoveBackward()
+    {
+        moveInput = -1f;
+    }
+
+
+
 }
