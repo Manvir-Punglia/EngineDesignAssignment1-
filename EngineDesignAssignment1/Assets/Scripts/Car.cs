@@ -70,27 +70,26 @@ public class Car : Subject
         //Debug.Log("Turn Val: " + turnInput);
 
 
-        moveInput = 0f;
-        turnInput = 0f;
+        
 
-        if (Input.GetKey(KeyCode.W))
-        {
-            MoveForward();  
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            MoveBackward();
-        }
+        //if (Input.GetKey(KeyCode.W))
+        //{
+        //    MoveForward();  
+        //}
+        //else if (Input.GetKey(KeyCode.S))
+        //{
+        //    MoveBackward();
+        //}
 
         
-        if (Input.GetKey(KeyCode.A))
-        {
-            TurnLeft();
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            TurnRight();
-        }
+        //if (Input.GetKey(KeyCode.A))
+        //{
+        //    TurnLeft();
+        //}
+        //else if (Input.GetKey(KeyCode.D))
+        //{
+        //    TurnRight();
+        //}
 
        
         if (rb.velocity.magnitude < maxSpeed)// will add foerce while speed is below max 
@@ -123,7 +122,8 @@ public class Car : Subject
             }
         }
 
-        
+        moveInput = 0f;
+        turnInput = 0f;
 
     }
     public float GetSpeed()
@@ -175,6 +175,7 @@ public class Car : Subject
     public void MoveForward()
     {
         moveInput = 1f;
+        Debug.Log("moving Forward");
     }
     public void MoveBackward()
     {

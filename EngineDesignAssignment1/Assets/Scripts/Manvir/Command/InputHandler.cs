@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputHandler
+public class InputHandler:MonoBehaviour
 {
     private Dictionary<KeyCode, Command> keyLog;
 
@@ -20,9 +20,10 @@ public class InputHandler
     {
         foreach (var entry in keyLog)
         {
-            if (Input.GetKeyDown(entry.Key))
+            if (Input.GetKey(entry.Key))
             {
                 entry.Value.Execute();
+                Debug.Log(entry.Value);
             }
         }
     }
