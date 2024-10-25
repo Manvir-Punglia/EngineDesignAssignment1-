@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TownFactory : IBuildingFactory
+public class TownFactory : IFactory
 {
     private GameObject _buildingPrefab;
 
@@ -11,7 +11,7 @@ public class TownFactory : IBuildingFactory
         _buildingPrefab = buildingPrefab;
     }
 
-    public GameObject CreateBuilding()
+    public GameObject CreateProduct()
     {
         return GameObject.Instantiate(_buildingPrefab);
     }

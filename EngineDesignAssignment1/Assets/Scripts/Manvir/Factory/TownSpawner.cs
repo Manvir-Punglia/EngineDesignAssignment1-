@@ -5,7 +5,8 @@ using UnityEngine;
 public class TownSpawner : MonoBehaviour
 {
     public GameObject[] buildingPrefabs;  
-    public Transform[] spawnPoints;       
+    public Transform[] spawnPoints;
+    IFactory fac;
 
     void Awake()
     {     
@@ -15,9 +16,9 @@ public class TownSpawner : MonoBehaviour
             int rand = Random.Range(0, buildingPrefabs.Length);
 
            
-            IBuildingFactory fac = new TownFactory(buildingPrefabs[rand]);
+            IFactory fac = new TownFactory(buildingPrefabs[rand]);
 
-            GameObject building = fac.CreateBuilding();
+            GameObject building = fac.CreateProduct();
 
           
             building.transform.position = spawnPoints[i].position;

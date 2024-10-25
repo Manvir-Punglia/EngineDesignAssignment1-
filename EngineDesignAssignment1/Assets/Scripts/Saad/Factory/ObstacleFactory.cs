@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObstacleFactory : IObstacleFactory
+public class ObstacleFactory : IFactory
 {
     private GameObject _obstaclePrefab;
 
@@ -11,7 +11,7 @@ public class ObstacleFactory : IObstacleFactory
         _obstaclePrefab = obstaclePrefab;
     }
 
-    public GameObject CreateObstacle()
+    public GameObject CreateProduct()
     {
         return GameObject.Instantiate(_obstaclePrefab);
     }

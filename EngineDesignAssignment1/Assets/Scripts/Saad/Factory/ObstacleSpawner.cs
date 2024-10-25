@@ -8,6 +8,7 @@ public class ObstacleSpawner : MonoBehaviour
     public Material roadMaterial;
     public BoxCollider TargetArea;
     public int obstacleCount = 10;
+    IFactory factory;
 
     private void Awake()
     {
@@ -24,9 +25,9 @@ public class ObstacleSpawner : MonoBehaviour
             {
                 int rand = Random.Range(0, obstaclePrefab.Length);
 
-                IObstacleFactory factory = new ObstacleFactory(obstaclePrefab[rand]);
+                IFactory factory = new ObstacleFactory(obstaclePrefab[rand]);
 
-                GameObject product = factory.CreateObstacle();
+                GameObject product = factory.CreateProduct();
 
                 product.transform.position = spawnPos;
                 product.transform.rotation = Quaternion.AngleAxis(Random.Range(0f, 360f), Vector3.up);
