@@ -207,4 +207,12 @@ public class Car : Subject
         rb.angularVelocity = Vector3.zero;
     }
 
+    public void ReduceSpeed(float speedLoss)
+    {
+        Vector3 currentVel = rb.velocity;
+        float newSpeed = Mathf.Max(currentVel.magnitude - speedLoss, 0f);
+        rb.velocity = currentVel.normalized * newSpeed;
+    }
+
+
 }
