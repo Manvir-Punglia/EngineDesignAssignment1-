@@ -1,0 +1,2 @@
+Resolution: 800,600
+Fullscreen: False
