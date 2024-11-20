@@ -1,2 +1,5 @@
-Resolution: 800,600
-Fullscreen: False
+Resolution: 1920,1080
+Fullscreen: True
+Car Speed: 500
+Timer Length: 120.0
+Obstacle Amount: 10

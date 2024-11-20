@@ -5,20 +5,36 @@ using UnityEngine.UI;
 
 public class TimeManager : Singleton<TimeManager>
 {
-    public float startTimeInSeconds = 10f;  
+    private float startTimeInSeconds ;  
     private float currentTime;
     private bool isCountingDown = false;
     public Text text;  
     public Car _car;
+    public ConfigParser _configParser;
 
+  
     void Start()
     {
+        
+        
+        
         ResetTimer();
+
+        if (_configParser == null)
+        {
+            _configParser = FindObjectOfType<ConfigParser>();
+        }
+            
 
         if (_car == null)
         {
             _car = FindObjectOfType<Car>();
         }
+        startTimeInSeconds = _configParser.timerLength;
+        //Debug.Log(startTimeInSeconds);
+        currentTime = startTimeInSeconds;
+        //Debug.Log(currentTime);
+        
     }
 
     void Update()
@@ -26,7 +42,7 @@ public class TimeManager : Singleton<TimeManager>
         if (Input.GetKeyDown(KeyCode.R))
         {
            
-            ResetTimer();
+           // ResetTimer();
         }
     }
 

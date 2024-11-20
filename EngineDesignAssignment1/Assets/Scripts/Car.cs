@@ -10,6 +10,8 @@ public class Car : Subject
     public float moveForce = 500f;  
     public float turnSpeed = 100f;
     public float maxSpeed = 50f;
+    
+    public ConfigParser _configParser;
 
     public TrailRenderer[] _tireTracks;
 
@@ -39,12 +41,17 @@ public class Car : Subject
 
         _progressBar = (ProgressBar)FindObjectOfType(typeof(ProgressBar));
         _checkpointText = (CheckpointText)FindObjectOfType(typeof(CheckpointText));
+        if (_configParser == null)
+        {
+            _configParser = FindObjectOfType<ConfigParser>();
+        }
     }
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         isDrift = false;
         carRenderer = GetComponent<Renderer>();
+        moveForce = _configParser.carSpeed;
     }
 
     private void OnEnable()

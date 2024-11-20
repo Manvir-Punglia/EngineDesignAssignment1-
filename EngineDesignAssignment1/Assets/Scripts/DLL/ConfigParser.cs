@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,8 +8,11 @@ using UnityEngine;
 public class ConfigParser : MonoBehaviour
 {
     private string filePath;
+    public float carSpeed { get; private set; }
+    public float timerLength { get; private set; }
+    public int obstacleAmount { get; private set; }
 
-    void Start()
+    private void Awake()
     {
         // path 
         filePath = Path.Combine(Application.streamingAssetsPath, "Config.txt");
@@ -42,6 +46,24 @@ public class ConfigParser : MonoBehaviour
                         string fullscreenPart = line.Replace("Fullscreen:", "").Trim();
                         isFullScreen = bool.Parse(fullscreenPart);
                     }
+                    else if (line.StartsWith("Car Speed:"))
+                    {
+                        // Extract car speed value
+                        string carSpeedPart = line.Replace("Car Speed:", "").Trim();
+                        carSpeed = float.Parse(carSpeedPart);
+                    }
+                    else if (line.StartsWith("Timer Length:"))
+                    {
+                        // Extract timer length value
+                        string timerLengthPart = line.Replace("Timer Length:", "").Trim();
+                        timerLength = float.Parse(timerLengthPart);
+                    }
+                    else if (line.StartsWith("Obstacle Amount:"))
+                    {
+                        // Extract obstacle amount value
+                        string obstacleAmountPart = line.Replace("Obstacle Amount:", "").Trim();
+                        obstacleAmount = int.Parse(obstacleAmountPart);
+                    }
                 }
 
 
@@ -54,6 +76,11 @@ public class ConfigParser : MonoBehaviour
                 {
                     Debug.LogError("Break 2");
                 }
+                
+                // Log other game settings
+                Debug.Log($"Car Speed: {carSpeed}");
+                Debug.Log($"Timer Length: {timerLength}");
+                Debug.Log($"Obstacle Amount: {obstacleAmount}");
             }
             catch (System.Exception)
             {
@@ -64,5 +91,10 @@ public class ConfigParser : MonoBehaviour
         {
             Debug.LogError("Break 3");
         }
+    }
+
+    void Start()
+    {
+        
     }
 }
