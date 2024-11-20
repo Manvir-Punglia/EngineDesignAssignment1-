@@ -10,7 +10,7 @@ public class TimeManager : Singleton<TimeManager>
     private bool isCountingDown = false;
     public Text text;  
     public Car _car;
-    public ConfigParser _configParser;
+    public OurPlugin.ConfigParser _configParser;
 
   
     void Start()
@@ -22,7 +22,7 @@ public class TimeManager : Singleton<TimeManager>
 
         if (_configParser == null)
         {
-            _configParser = FindObjectOfType<ConfigParser>();
+            _configParser = FindObjectOfType<OurPlugin.ConfigParser>();
         }
             
 
