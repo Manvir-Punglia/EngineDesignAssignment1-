@@ -10,6 +10,11 @@ public class CheckpointText : Observer
     private int _lastCheckpoint;
     public GameObject checkpointTextObject;
 
+    [SerializeField] private bool isDirty = false;
+
+    private int _previousCurrentCheckpoint;
+    private int _previousLastCheckpoint;
+
     private void Awake()
     {
         if (checkpointTextObject == null)
@@ -27,9 +32,13 @@ public class CheckpointText : Observer
 
     void Update()
     {
-        if (checkpointTextObject != null)
+        if (isDirty && checkpointTextObject != null)
         {
             checkpointTextObject.GetComponent<Text>().text = (_currentCheckpoint.ToString()) + "/" + _lastCheckpoint;
+
+            isDirty = false;
+
+            Debug.Log("Now");
         }
         
     }
@@ -39,5 +48,13 @@ public class CheckpointText : Observer
         _car = subject.GetComponent<Car>();
         _currentCheckpoint = _car._currentCheckpoint;
         _lastCheckpoint = _car._lastCheckpoint;
+
+        if (_currentCheckpoint != _previousCurrentCheckpoint || _lastCheckpoint != _previousLastCheckpoint)
+        {   
+            isDirty = true;
+
+            _previousCurrentCheckpoint = _currentCheckpoint;
+            _previousLastCheckpoint = _lastCheckpoint;
+        }
     }
 }
