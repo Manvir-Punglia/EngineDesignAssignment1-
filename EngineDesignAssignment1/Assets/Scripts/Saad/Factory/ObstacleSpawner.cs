@@ -7,12 +7,21 @@ public class ObstacleSpawner : MonoBehaviour
     public GameObject[] obstaclePrefab;
     public Material roadMaterial;
     public BoxCollider TargetArea;
-    public int obstacleCount = 10;
+    [HideInInspector] public int obstacleCount;
+
     IFactory factory;
+
+    public OurPlugin.ConfigParser _configParser;
 
     private void Awake()
     {
         SpawnObstacles();
+
+        if (_configParser == null)
+        {
+            _configParser = FindObjectOfType<OurPlugin.ConfigParser>();
+            obstacleCount = _configParser.obstacleAmount;
+        }
     }
 
     void SpawnObstacles()

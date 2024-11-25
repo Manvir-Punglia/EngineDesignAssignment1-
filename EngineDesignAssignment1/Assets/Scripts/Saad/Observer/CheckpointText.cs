@@ -37,8 +37,6 @@ public class CheckpointText : Observer
             checkpointTextObject.GetComponent<Text>().text = (_currentCheckpoint.ToString()) + "/" + _lastCheckpoint;
 
             isDirty = false;
-
-            Debug.Log("Now");
         }
         
     }

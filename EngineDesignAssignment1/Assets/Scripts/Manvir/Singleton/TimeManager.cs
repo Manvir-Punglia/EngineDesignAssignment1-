@@ -71,6 +71,7 @@ public class TimeManager : Singleton<TimeManager>
     {
         _car.enabled = false;
         _car.isDrift = false;
+        _car.Explode();
         StartCoroutine(RestartAfterDelay(5));
     }
 

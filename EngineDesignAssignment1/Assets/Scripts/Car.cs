@@ -6,14 +6,26 @@ using UnityEngine.UIElements;
 
 public class Car : Subject
 {
+    [Header("Plugin")]
+    public OurPlugin.ConfigParser _configParser;
+
+    [Header("Physics Properties")]
     public Rigidbody rb;               
     public float moveForce = 500f;  
     public float turnSpeed = 100f;
     public float maxSpeed = 50f;
-    
-    public OurPlugin.ConfigParser _configParser;
+    public float floatForce = 10f;
+    public float maxFloatHeight = 2f;
+    public float minFloatHeight = 1f;
+    public Transform respawnPos;
 
+    [Header("Wheel Properties")]
     public TrailRenderer[] _tireTracks;
+    public Transform[] _rearWheels;
+    public Transform[] _frontWheels;
+    public float wheelRadius;
+    public float maxSteerAngle = 20f;
+    public float driftPotential = 45f;
 
     private float moveInput;          
     private float turnInput;           
@@ -26,15 +38,20 @@ public class Car : Subject
     [HideInInspector] public int _lastCheckpoint;
 
     [HideInInspector] public bool isDrift;
-    public float driftPotential = 45f;
 
-    public float floatForce = 10f;
-    public float maxFloatHeight = 2f;
-    public float minFloatHeight = 1f;
+    public Renderer carRenderer;
 
-    private Renderer carRenderer;
+    private float distTravelled;
+    private float rotInRad;
+    private float rotInDeg;
 
-    public Transform respawnPos;
+    private Vector3 localAngle;
+    private float steerAngle;
+
+    public GameObject[] _bombParts;
+
+    public ParticleSystem explosionVFX;
+    
 
     private void Awake()
     {
@@ -50,7 +67,7 @@ public class Car : Subject
     {
         rb = GetComponent<Rigidbody>();
         isDrift = false;
-        carRenderer = GetComponent<Renderer>();
+        carRenderer = carRenderer.gameObject.GetComponent<Renderer>();
         moveForce = _configParser.carSpeed;
     }
 
@@ -74,6 +91,8 @@ public class Car : Subject
         _lastCheckpoint = CheckpointManager.Instance.lastCheckpointIndex;
 
         CheckDrift();
+        TireSpin();
+        TireTurn();
     }
 
     void FixedUpdate()
@@ -123,15 +142,15 @@ public class Car : Subject
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit))
         {
-            float distToGround = hit.distance;
 
-            
+            float distToGround = hit.distance;
 
             if (distToGround < minFloatHeight)
             {
                 float upwardForce = floatForce * (minFloatHeight - distToGround);
 
                 rb.AddForce(Vector3.up * upwardForce, ForceMode.Acceleration);
+
             }
         }
 
@@ -160,6 +179,41 @@ public class Car : Subject
 
         if (isDrift) StartEmitting();
         else StopEmitting();
+    }
+
+    private void TireSpin()
+    {
+        distTravelled = rb.velocity.magnitude * Time.deltaTime;
+        rotInRad = distTravelled / wheelRadius;
+        rotInDeg = rotInRad * Mathf.Rad2Deg;
+
+        for (int i = 0; i < _rearWheels.Length; i++)
+        {
+            _rearWheels[i].transform.Rotate(0, 0, rotInDeg);
+        }
+    }
+
+    private void TireTurn()
+    {
+        if (turnInput == -1f)
+        {
+            steerAngle = 90f - maxSteerAngle;
+        }
+        else if(turnInput == 1f)
+        {
+            steerAngle = 90f + maxSteerAngle;
+        }
+        else
+        {
+            steerAngle = 90f;
+        }
+        
+        for (int i = 0; i < _frontWheels.Length; i++)
+        {
+            localAngle = _frontWheels[i].transform.localEulerAngles;
+            localAngle.y = steerAngle;
+            _frontWheels[i].transform.localEulerAngles = localAngle;
+        }
     }
 
     private void StartEmitting()
@@ -197,12 +251,12 @@ public class Car : Subject
 
     public Color GetCarColour()
     {
-        return carRenderer.material.color;
+        return carRenderer.materials[0].color;
     }
 
     public void SetCarColour(Color colour)
     {
-        carRenderer.material.color = colour;
+        carRenderer.materials[0].color = colour;
     }
 
     public void RespawnCar()
@@ -212,6 +266,16 @@ public class Car : Subject
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+
+        for (int i = 0; i < _bombParts.Length; i++)
+        {
+            _bombParts[i].gameObject.SetActive(true);
+        }
+
+        for (int i = 0; i < _rearWheels.Length; i++)
+        {
+            _rearWheels[i].gameObject.SetActive(true);
+        }
     }
 
     public void ReduceSpeed(float speedLoss)
@@ -219,6 +283,22 @@ public class Car : Subject
         Vector3 currentVel = rb.velocity;
         float newSpeed = Mathf.Max(currentVel.magnitude -  speedLoss, 0f);
         rb.velocity = currentVel.normalized * newSpeed;
+    }
+
+    public void Explode()
+    {
+        explosionVFX.Play();
+
+        for (int i = 0; i < _bombParts.Length; i++)
+        {
+            _bombParts[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < _rearWheels.Length; i++)
+        {
+            _rearWheels[i].gameObject.SetActive(false);
+        }
+        
     }
 
 }
