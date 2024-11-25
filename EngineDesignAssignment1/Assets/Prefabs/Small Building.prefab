@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 2544576665633454566}
   - component: {fileID: 573194697318245499}
   - component: {fileID: 8254851045551063988}
+  - component: {fileID: 3003394214946695486}
   m_Layer: 0
   m_Name: Small Building
   m_TagString: Untagged
@@ -137,3 +138,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3003394214946695486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6541861882611003132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 292ede77bc56f004896c3b2a59eb309c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BuildingName: 'Small Building '
+  Health: 1
+  Cost: 10
+  Material: {fileID: 2100000, guid: f6eacd7a301818e48a36a7b976c13034, type: 2}
