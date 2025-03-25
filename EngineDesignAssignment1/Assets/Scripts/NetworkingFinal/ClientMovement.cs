@@ -10,7 +10,7 @@ using TMPro;
 public class ClientMovement : MonoBehaviour
 {
     private Socket client;
-    private byte[] buffer = new byte[1024]; // Increased buffer size for string messages
+    private byte[] buffer = new byte[1024];
     private IPEndPoint serverEndPoint;
     private Dictionary<string, GameObject> otherPlayers = new Dictionary<string, GameObject>();
     
@@ -20,8 +20,8 @@ public class ClientMovement : MonoBehaviour
     public GameObject playerPrefab;
     
     [Header("References")]
-   // [SerializeField] private Inbetween _inbetween;
-    [SerializeField] private GameObject localPlayer;
+    //[SerializeField] private Inbetween _inbetween;
+    [SerializeField] private Transform localPlayer;
     [SerializeField] private TextMeshProUGUI debugText;
 
     void Start()
@@ -44,7 +44,6 @@ public class ClientMovement : MonoBehaviour
 
     void Update()
     {
-        // Update debug display
         Debug.Log($"Connected players: {otherPlayers.Count + 1}"); 
     }
 
@@ -54,13 +53,16 @@ public class ClientMovement : MonoBehaviour
         {
             try
             {
-                // Get current position
-                Vector3 position = localPlayer.transform.position;
+                // Get current position and rotation
+                Vector3 position = localPlayer.position;
+                Quaternion rotation = localPlayer.rotation;
                 
-                // Create message: "Name:X:Y:Z"
-                string message = $"{playerName}:{position.x}:{position.y}:{position.z}";
+                // Create message: "Name:PosX:PosY:PosZ:RotX:RotY:RotZ:RotW"
+                string message = $"{playerName}:" +
+                    $"{position.x}:{position.y}:{position.z}:" +
+                    $"{rotation.x}:{rotation.y}:{rotation.z}:{rotation.w}";
+                
                 byte[] sendBuffer = Encoding.ASCII.GetBytes(message);
-                
                 client.SendTo(sendBuffer, serverEndPoint);
             }
             catch (Exception ex)
@@ -84,29 +86,41 @@ public class ClientMovement : MonoBehaviour
                     int received = client.ReceiveFrom(buffer, ref remoteEP);
                     string message = Encoding.ASCII.GetString(buffer, 0, received);
                     
-                    // Parse message format: "Name:X:Y:Z"
+                    // Parse message format: "Name:PosX:PosY:PosZ:RotX:RotY:RotZ:RotW"
                     string[] parts = message.Split(':');
-                    if (parts.Length == 4)
+                    if (parts.Length == 8)
                     {
                         string receivedName = parts[0];
-                        float x = float.Parse(parts[1]);
-                        float y = float.Parse(parts[2]);
-                        float z = float.Parse(parts[3]);
+                        float px = float.Parse(parts[1]);
+                        float py = float.Parse(parts[2]);
+                        float pz = float.Parse(parts[3]);
+                        float rx = float.Parse(parts[4]);
+                        float ry = float.Parse(parts[5]);
+                        float rz = float.Parse(parts[6]);
+                        float rw = float.Parse(parts[7]);
 
-                        // Skip our own messages
                         if (receivedName == playerName) continue;
 
-                        // Create new player if not exists
+                        Quaternion rotation = new Quaternion(rx, ry, rz, rw);
+                        Vector3 position = new Vector3(px, py, pz);
+
                         if (!otherPlayers.ContainsKey(receivedName))
                         {
-                            GameObject newPlayer = Instantiate(playerPrefab, new Vector3(x, y, z), Quaternion.identity);
+                            GameObject newPlayer = Instantiate(
+                                playerPrefab, 
+                                position, 
+                                rotation
+                            );
                             newPlayer.name = receivedName;
                             otherPlayers.Add(receivedName, newPlayer);
                             Debug.Log($"New player connected: {receivedName}");
                         }
-
-                        // Update position
-                        otherPlayers[receivedName].transform.position = new Vector3(x, y, z);
+                        else
+                        {
+                            Transform playerTransform = otherPlayers[receivedName].transform;
+                            playerTransform.position = position;
+                            playerTransform.rotation = rotation;
+                        }
                     }
                 }
             }
@@ -126,7 +140,6 @@ public class ClientMovement : MonoBehaviour
             Debug.Log("UDP client shutdown");
         }
         
-        // Clean up other players
         foreach (var player in otherPlayers.Values)
         {
             Destroy(player);
