@@ -10,7 +10,7 @@ class UdpServer
     private Socket udpSocket;
     private List<IPEndPoint> clients = new List<IPEndPoint>();
     private readonly object clientLock = new object();
-    private byte[] buffer = new byte[1024]; // Increased buffer size for messages
+    private byte[] buffer = new byte[1024]; 
 
     public void Start()
     {
@@ -51,7 +51,7 @@ class UdpServer
             int bytesRead = udpSocket.EndReceiveFrom(ar, ref senderEP);
             var senderIPEP = (IPEndPoint)senderEP;
             
-            // Add new client if not already in list
+            // add new client if not in list
             lock (clientLock)
             {
                 if (!clients.Any(c => c.Equals(senderIPEP)))
@@ -61,10 +61,10 @@ class UdpServer
                 }
             }
 
-            // Broadcast to all other clients
+            // this is where it send the message to all other clients 
             lock (clientLock)
             {
-                foreach (var client in clients.ToList()) // Use copy for thread safety
+                foreach (var client in clients.ToList()) 
                 {
                     if (!client.Equals(senderIPEP))
                     {
@@ -73,7 +73,7 @@ class UdpServer
                 }
             }
 
-            // Decode and display the received message
+            // convert
             string receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
             Console.WriteLine($"Received from {senderIPEP}: {receivedMessage}");
 
@@ -85,7 +85,7 @@ class UdpServer
             BeginReceive();
         }
     }
-
+// message sent 
     private void SendCallback(IAsyncResult ar)
     {
         try { udpSocket.EndSendTo(ar); }

@@ -16,11 +16,13 @@ public class ClientMovement : MonoBehaviour
     
     [Header("Settings")]
     public string playerName = "Player1";
-    public float updateRate = 0.1f;
+    public float updateRate = 0.01f;// very important will change how fluid the movement is
     public GameObject playerPrefab;
     
     [Header("References")]
-    //[SerializeField] private Inbetween _inbetween;
+    //can be used if we want to input somthing into the script, ask Manvir if you need to do this 
+    //[SerializeField] private Inbetween _inbetween; 
+    
     [SerializeField] private Transform localPlayer;
     [SerializeField] private TextMeshProUGUI debugText;
 
@@ -31,9 +33,9 @@ public class ClientMovement : MonoBehaviour
             client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8889);
             
-            Debug.Log($"UDP client started connecting to {serverEndPoint}");
+            Debug.Log($"UDP connecting to {serverEndPoint}");
             
-            StartCoroutine(ReceiveLoop());
+            StartCoroutine(ReceiveLoop());// we use Coroutines because threads are cringe 
             StartCoroutine(SendLoop());
         }
         catch (Exception ex)
@@ -44,7 +46,7 @@ public class ClientMovement : MonoBehaviour
 
     void Update()
     {
-        Debug.Log($"Connected players: {otherPlayers.Count + 1}"); 
+        Debug.Log($"connected players num: {otherPlayers.Count + 1}"); 
     }
 
     private IEnumerator SendLoop()
@@ -57,10 +59,8 @@ public class ClientMovement : MonoBehaviour
                 Vector3 position = localPlayer.position;
                 Quaternion rotation = localPlayer.rotation;
                 
-                // Create message: "Name:PosX:PosY:PosZ:RotX:RotY:RotZ:RotW"
-                string message = $"{playerName}:" +
-                    $"{position.x}:{position.y}:{position.z}:" +
-                    $"{rotation.x}:{rotation.y}:{rotation.z}:{rotation.w}";
+                // The system only supports this format, 
+                string message = $"{playerName}:" + $"{position.x}:{position.y}:{position.z}:" + $"{rotation.x}:{rotation.y}:{rotation.z}:{rotation.w}";
                 
                 byte[] sendBuffer = Encoding.ASCII.GetBytes(message);
                 client.SendTo(sendBuffer, serverEndPoint);
@@ -87,8 +87,8 @@ public class ClientMovement : MonoBehaviour
                     string message = Encoding.ASCII.GetString(buffer, 0, received);
                     
                     // Parse message format: "Name:PosX:PosY:PosZ:RotX:RotY:RotZ:RotW"
-                    string[] parts = message.Split(':');
-                    if (parts.Length == 8)
+                    string[] parts = message.Split(':');// how we split the values into different pieces 
+                    if (parts.Length == 8)// make sure the size is right
                     {
                         string receivedName = parts[0];
                         float px = float.Parse(parts[1]);
@@ -99,12 +99,12 @@ public class ClientMovement : MonoBehaviour
                         float rz = float.Parse(parts[6]);
                         float rw = float.Parse(parts[7]);
 
-                        if (receivedName == playerName) continue;
+                        if (receivedName == playerName) continue;// this will skip what happens next if it recives itw own name in the data 
 
                         Quaternion rotation = new Quaternion(rx, ry, rz, rw);
                         Vector3 position = new Vector3(px, py, pz);
 
-                        if (!otherPlayers.ContainsKey(receivedName))
+                        if (!otherPlayers.ContainsKey(receivedName))// if the player is not already in the scene it will add them 
                         {
                             GameObject newPlayer = Instantiate(
                                 playerPrefab, 
@@ -115,7 +115,7 @@ public class ClientMovement : MonoBehaviour
                             otherPlayers.Add(receivedName, newPlayer);
                             Debug.Log($"New player connected: {receivedName}");
                         }
-                        else
+                        else // this is if they already have a car
                         {
                             Transform playerTransform = otherPlayers[receivedName].transform;
                             playerTransform.position = position;
