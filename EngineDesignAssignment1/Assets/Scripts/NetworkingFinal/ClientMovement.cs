@@ -26,6 +26,10 @@ public class ClientMovement : MonoBehaviour
     [SerializeField] private Transform localPlayer;
     [SerializeField] private TextMeshProUGUI debugText;
 
+
+    float timeSinceLastUpdate = 0.0f;
+    float maxTimeForUpdate = 0.01f;
+    bool deadCheckoning = false;
     void Start()
     {
         try
@@ -46,7 +50,8 @@ public class ClientMovement : MonoBehaviour
 
     void Update()
     {
-        Debug.Log($"connected players num: {otherPlayers.Count + 1}"); 
+        Debug.Log($"connected players num: {otherPlayers.Count + 1}");
+
     }
 
     private IEnumerator SendLoop()
@@ -117,9 +122,18 @@ public class ClientMovement : MonoBehaviour
                         }
                         else // this is if they already have a car
                         {
+                            DeadReckoning playerDeadReckon = otherPlayers[receivedName].GetComponent<DeadReckoning>();
+
+                            playerDeadReckon.deadCheckoning = false;
+
                             Transform playerTransform = otherPlayers[receivedName].transform;
                             playerTransform.position = position;
                             playerTransform.rotation = rotation;
+
+                            playerDeadReckon.updateData(position, rotation);
+
+                            playerDeadReckon.deadCheckoning = true;
+                            
                         }
                     }
                 }
@@ -128,6 +142,7 @@ public class ClientMovement : MonoBehaviour
             {
                 Debug.LogError("Receive error: " + ex.Message);
             }
+
             yield return null;
         }
     }
