@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Saad\Optimization\Flyweight\Obstacle.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IFactory.cs" />
     <Compile Include="Assets\Scripts\Saad\Factory\ObstacleSpawner.cs" />
+    <Compile Include="Assets\Scripts\NetworkingFinal\TCPClient.cs" />
     <Compile Include="Assets\Scripts\NetworkingFinal\ClientMovement.cs" />
     <Compile Include="Assets\Scripts\Saad\Command\CustomizerUI.cs" />
     <Compile Include="Assets\Scripts\Car.cs" />
