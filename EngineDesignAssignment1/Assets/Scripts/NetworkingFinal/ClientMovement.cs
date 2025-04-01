@@ -18,6 +18,7 @@ public class ClientMovement : MonoBehaviour
     public string playerName = "Player1";
     public float updateRate = 0.01f;// very important will change how fluid the movement is
     public GameObject playerPrefab;
+    public ChooseName _chooseName;
     
     [Header("References")]
     //can be used if we want to input somthing into the script, ask Manvir if you need to do this 
@@ -25,6 +26,7 @@ public class ClientMovement : MonoBehaviour
     
     [SerializeField] private Transform localPlayer;
     [SerializeField] private TextMeshProUGUI debugText;
+    [SerializeField] private TextMeshProUGUI nameText;
 
 
     float timeSinceLastUpdate = 0.0f;
@@ -32,6 +34,10 @@ public class ClientMovement : MonoBehaviour
     bool deadCheckoning = false;
     void Start()
     {
+        _chooseName = FindObjectOfType<ChooseName>();
+        playerName = _chooseName._name;
+        nameText.text = playerName;
+
         try
         {
             client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);

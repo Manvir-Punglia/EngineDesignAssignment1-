@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\Manvir\Optimization\Building.cs" />
     <Compile Include="Assets\Scripts\Manvir\Singleton\TimeManager.cs" />
     <Compile Include="Assets\Scripts\Saad\Factory\ObstacleFactory.cs" />
+    <Compile Include="Assets\Scripts\NetworkingFinal\ChooseName.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IObstacleFactory.cs" />
     <Compile Include="Assets\Scripts\Saad\Singleton\CheckpointManager.cs" />
     <Compile Include="Assets\Scripts\Manvir\Observer\ProgressBar.cs" />
