@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CheckpointText : Observer
 {
     private Car _car;
-    private int _currentCheckpoint;
+    public int _currentCheckpoint;
     private int _lastCheckpoint;
     public GameObject checkpointTextObject;
 

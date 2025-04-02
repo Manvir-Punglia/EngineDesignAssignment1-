@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace NetworkingFinalProj
 {
@@ -22,8 +23,15 @@ namespace NetworkingFinalProj
 
         static string _ip;
 
+        static string path = @"..\\leaderboard.txt";
+
+        static string leaderboard;
+
+        static bool addScore = true;
         public void Start()
         {
+            
+
 
 
             Console.WriteLine("Starting Server...");
@@ -84,26 +92,93 @@ namespace NetworkingFinalProj
                 Console.WriteLine("Received Message: " + msg);
                 Console.WriteLine("From: " + socket.RemoteEndPoint.ToString());
 
-                sendBuffer = Encoding.ASCII.GetBytes(sendMsg);
 
 
+                string[] msgTxt = msg.Split(':');
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        string[] thisline = line.Split('|');
+                        
+
+                        for(int i = 0; i < thisline.Length; i++)
+                        {
+                            string[] s = thisline[i].Split(':');
+                            //Console.WriteLine(s[0] + " " + msgTxt[0]);
+                            if (s[0] == msgTxt[0])
+                            {
+                                addScore = false;
+                                int s1 = Int32.Parse(s[1]);
+                                int m1 = Int32.Parse(msgTxt[1]);
+                                if (m1 > s1)
+                                {
+                                    thisline[i] = msg;
+                                    Console.WriteLine("Score Changed!");
+                                    
+                                }
+                            }
+                        }
+
+                        leaderboard = "";
+
+                        foreach(string s in thisline)
+                        {
+                            if (addScore)
+                            {
+                                leaderboard = leaderboard + s.ToString() + "|";
+                            }
+                            else
+                            {
+                                if (thisline[thisline.Length-1] == s)
+                                leaderboard = leaderboard + s.ToString();
+                            }
+                        }
+                        Console.WriteLine(leaderboard);
+
+
+                        
+
+
+
+
+                    }
+
+                    
+                    
+                }
 
 
                 //Send updates to all clients in the list
+                
+                using (StreamWriter sw = new StreamWriter(path, false))
+                {
+                    if (addScore)
+                    {
+                        leaderboard = leaderboard + msg;
+                    }
+                    sw.Write(leaderboard);
+                }
+                
+                
 
+                
+
+
+
+                sendBuffer = Encoding.ASCII.GetBytes(leaderboard);
                 foreach (var sockets in clientSockets)
                 {
 
-                    if (sockets.RemoteEndPoint.ToString() != socket.RemoteEndPoint.ToString())
-                    {
-                        Console.WriteLine("Sent to: " + sockets.RemoteEndPoint.ToString());
-                        Console.WriteLine("");
+                    Console.WriteLine("Sent to: " + sockets.RemoteEndPoint.ToString());
+                    Console.WriteLine("");
 
-                        sockets.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SendCallback), sockets);
-                    }
+                    sockets.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SendCallback), sockets);
 
 
                 }
+
 
                 sendMsg = "";
 
@@ -112,7 +187,7 @@ namespace NetworkingFinalProj
 
 
                 socket.BeginReceive(buffer, 0, buffer.Length, 0, new AsyncCallback(ReceiveCallback), socket);
-
+                addScore = true;
             }
 
 

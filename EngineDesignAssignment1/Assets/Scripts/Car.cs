@@ -1,3 +1,4 @@
+using EasyRoads3Dv3;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -51,7 +52,8 @@ public class Car : Subject
     public GameObject[] _bombParts;
 
     public ParticleSystem explosionVFX;
-    
+
+    bool canSend = false;
 
     private void Awake()
     {
@@ -289,6 +291,13 @@ public class Car : Subject
     {
         explosionVFX.Play();
 
+        if(GetComponent<TCPClient>() != null && canSend)
+        {
+            var checkPointManager = FindObjectOfType<CheckpointText>();
+            var clientMove = GetComponent<ClientMovement>();
+            string message = $"{clientMove.playerName}:" + $"{checkPointManager._currentCheckpoint}";
+            GetComponent<TCPClient>().SendMsg(message);
+        }
         for (int i = 0; i < _bombParts.Length; i++)
         {
             _bombParts[i].gameObject.SetActive(false);
@@ -298,6 +307,8 @@ public class Car : Subject
         {
             _rearWheels[i].gameObject.SetActive(false);
         }
+
+        canSend = true;
         
     }
 

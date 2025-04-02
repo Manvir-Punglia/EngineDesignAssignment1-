@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\Saad\Factory\ObstacleSpawner.cs" />
     <Compile Include="Assets\Scripts\NetworkingFinal\TCPClient.cs" />
     <Compile Include="Assets\Scripts\NetworkingFinal\ClientMovement.cs" />
+    <Compile Include="Assets\Scripts\NetworkingFinal\Scoreboard.cs" />
     <Compile Include="Assets\Scripts\Saad\Command\CustomizerUI.cs" />
     <Compile Include="Assets\Scripts\Car.cs" />
     <Compile Include="Assets\Scripts\Misc\CameraFollow.cs" />

@@ -13,7 +13,8 @@ public class TCPClient : MonoBehaviour
     private static byte[] sendBuffer = new byte[1024];
 
 
-    private static string receivedMessage;
+    public string receivedMessage;
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +32,7 @@ public class TCPClient : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SendMsg("I HATE YOU!!!");
+        //SendMsg("I HATE YOU!!!");
     }
 
 
@@ -45,6 +46,7 @@ public class TCPClient : MonoBehaviour
 
         //enterMsg.updateRecv(msg);
         receivedMessage = msg;
+
 
         socket.BeginReceive(buffer, 0, buffer.Length, 0, new AsyncCallback(ReceiveCallback), socket);
     }
