@@ -28,6 +28,9 @@ namespace NetworkingFinalProj
         static string leaderboard;
 
         static bool addScore = true;
+
+        static string[] thisline;
+        static string line;
         public void Start()
         {
             
@@ -93,20 +96,27 @@ namespace NetworkingFinalProj
                 Console.WriteLine("From: " + socket.RemoteEndPoint.ToString());
 
 
-
+                //msgTxt is the currently received message split up
                 string[] msgTxt = msg.Split(':');
                 using (StreamReader sr = new StreamReader(path))
                 {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
+                    ///OH MY GOOOOOOODDDDD IT WAS SUCH A MISTAKE TO DO IT LIKE THIIIIIIIIIIIIIISSSSSSSS WHAT'S WRONG WIHT MEEEEEEEE
+                    line = sr.ReadLine();
+                    if (line != null)
                     {
-                        string[] thisline = line.Split('|');
+                        //thisline is an array of every scoreset 
+                        thisline = line.Split('|');
                         
+                        foreach(string s in thisline)
+                        {
+                            Console.WriteLine("Current ScoreSet: " + s);
+                        }
 
                         for(int i = 0; i < thisline.Length; i++)
                         {
+                            //s is an array of the currently read score set's name and score
                             string[] s = thisline[i].Split(':');
-                            //Console.WriteLine(s[0] + " " + msgTxt[0]);
+
                             if (s[0] == msgTxt[0])
                             {
                                 addScore = false;
@@ -114,6 +124,7 @@ namespace NetworkingFinalProj
                                 int m1 = Int32.Parse(msgTxt[1]);
                                 if (m1 > s1)
                                 {
+                                    
                                     thisline[i] = msg;
                                     Console.WriteLine("Score Changed!");
                                     
@@ -123,22 +134,15 @@ namespace NetworkingFinalProj
 
                         leaderboard = "";
 
-                        foreach(string s in thisline)
+                        foreach(string st in thisline)
                         {
-                            if (addScore)
-                            {
-                                leaderboard = leaderboard + s.ToString() + "|";
-                            }
-                            else
-                            {
-                                if (thisline[thisline.Length-1] == s)
-                                leaderboard = leaderboard + s.ToString();
-                            }
+                            Console.WriteLine($"{st}");
+                            leaderboard = leaderboard + st.ToString() + "|";
+
                         }
-                        Console.WriteLine(leaderboard);
 
 
-                        
+
 
 
 
@@ -160,10 +164,11 @@ namespace NetworkingFinalProj
                     }
                     sw.Write(leaderboard);
                 }
-                
-                
 
-                
+                Console.WriteLine("Current Leaderboard: " + leaderboard);
+
+
+
 
 
 

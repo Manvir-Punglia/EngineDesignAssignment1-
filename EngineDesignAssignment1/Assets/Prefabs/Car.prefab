@@ -2228,7 +2228,6 @@ GameObject:
   - component: {fileID: 5165954406776489084}
   - component: {fileID: 8694190623665127337}
   - component: {fileID: 4263203790475704191}
-  - component: {fileID: 6288653136989065155}
   - component: {fileID: 7869581149251784778}
   - component: {fileID: 1532623716930690055}
   m_Layer: 0
@@ -2325,58 +2324,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6288653136989065155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4074010774117423594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aacf1500c27dac429bd888b0f41dd94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _configParser: {fileID: 0}
-  rb: {fileID: 7869581149251784778}
-  moveForce: 500
-  turnSpeed: 100
-  maxSpeed: 50
-  floatForce: 20
-  maxFloatHeight: 1.8
-  minFloatHeight: 1.2
-  respawnPos: {fileID: 0}
-  _tireTracks:
-  - {fileID: 4102795122872618346}
-  - {fileID: 8655108870662598381}
-  - {fileID: 5383706824309705097}
-  - {fileID: 809296636778402014}
-  _rearWheels:
-  - {fileID: 2651921618685110264}
-  - {fileID: 5027297705306540726}
-  - {fileID: 2864912114006905141}
-  - {fileID: 5016848581335999918}
-  _frontWheels:
-  - {fileID: 2864912114006905141}
-  - {fileID: 5016848581335999918}
-  wheelRadius: 0.25
-  maxSteerAngle: 20
-  driftPotential: 30
-  _currentCheckpoint: 0
-  _lastCheckpoint: 0
-  isDrift: 0
-  carRenderer: {fileID: 2912448936059771234}
-  _bombParts:
-  - {fileID: 6974021304957262763}
-  - {fileID: 187189728315335406}
-  - {fileID: 4351989006108322067}
-  - {fileID: 1482932131146147188}
-  - {fileID: 4006931033280033815}
-  - {fileID: 2505842850066851793}
-  - {fileID: 4733140455782740020}
-  - {fileID: 8075074259137881381}
-  - {fileID: 6394877222006809163}
-  explosionVFX: {fileID: 2978412283574511284}
 --- !u!54 &7869581149251784778
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2416,6 +2363,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2426117919f42c44386ae9adfde3d65b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deadReckoning: 1
+  deadCheckoning: 0
+  lastPositionUpdate: {x: 0, y: 0, z: 0}
+  lastRotationUpdate: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &4351989006108322067
 GameObject:
   m_ObjectHideFlags: 0
@@ -4000,10 +3951,5 @@ PrefabInstance:
 --- !u!4 &122623148946427993 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6311962418098989600, guid: 72df50eadcd9bb2419c136448d10aacc, type: 3}
-  m_PrefabInstance: {fileID: 6209124106333780601}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &2978412283574511284 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 9186867474384592077, guid: 72df50eadcd9bb2419c136448d10aacc, type: 3}
   m_PrefabInstance: {fileID: 6209124106333780601}
   m_PrefabAsset: {fileID: 0}

@@ -77,7 +77,7 @@ class UdpServer
 
             // convert
             string receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-            Console.WriteLine($"Received from {senderIPEP}: {receivedMessage}");
+            //Console.WriteLine($"Received from {senderIPEP}: {receivedMessage}");
 
             BeginReceive();
         }

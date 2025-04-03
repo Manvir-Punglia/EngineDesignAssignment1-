@@ -489088,7 +489088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: Player2
-  updateRate: 1
+  updateRate: 0.01
   playerPrefab: {fileID: 4074010774117423594, guid: 9914894537b055244b080f06ab921ffe, type: 3}
   _chooseName: {fileID: 0}
   localPlayer: {fileID: 2310616232593920422}
